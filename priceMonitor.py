@@ -97,6 +97,7 @@ if __name__=='__main__':
     priceRecords=[]
     nextTime=0
     maxRecords=50
+    daily=False
     
 
     while True:
@@ -110,13 +111,16 @@ if __name__=='__main__':
 
         hourNow=int(datetime.datetime.now().strftime("%H"))
 
-        if hourNow==13 or hourNow==21: 
+        if (hourNow==13 or hourNow==21) and (not daily): 
+            daily=True
             sendmail(receivers,'daily price report',timeStamps,priceRecords)
             if len(priceRecords)>maxRecords:
                 priceRecords=priceRecords[-maxRecords:]
                 timeStamps=timeStamps[-maxRecords:]
+        else:
+            daily=False
 
-        time.sleep(10)
+        time.sleep(120)
         print 'still working... current time is %s'%(datetime.datetime.now().strftime("%H:%M:%S"))
 
 
