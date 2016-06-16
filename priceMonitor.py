@@ -117,8 +117,8 @@ if __name__=='__main__':
             if len(priceRecords)>maxRecords:
                 priceRecords=priceRecords[-maxRecords:]
                 timeStamps=timeStamps[-maxRecords:]
-            time.sleep(1000)
-        else:
+            time.sleep(100)
+        elif not (hourNow==13 or hourNow==21):
             daily=False
 
         time.sleep(120)
