@@ -26,7 +26,7 @@ def getPrice(url):
         'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
         }
 
-    r= requests.get(url,timeout=5,headers=myHeaders)
+    r= requests.get(url,timeout=10,headers=myHeaders)
 
 
     soup = bs(r.content)
@@ -91,7 +91,7 @@ def sendmail(receivers,subject,times,prices):
 if __name__=='__main__':
     alertPrice=410
     timeGap=1800
-    receivers=['luochenqu@foxmail.com','shinsyzgz@163.com','shinsy@foxmail.com']
+    receivers=['luochenqu@foxmail.com','zgz07ie@gmail.com']
     url="https://www.amazon.fr/dp/B00U654VS6/ref=cm_sw_r_other_apa_E6ryxbFTJT0XP"
     timeStamps=[]
     priceRecords=[]
