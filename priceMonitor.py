@@ -1,4 +1,5 @@
 #coding=utf-8
+import pdb
 import time
 import datetime
 import random as rd
@@ -40,7 +41,7 @@ def getPrice(url):
 def getNextTime(gap):
     timeNow=time.time()
     rd.seed()
-    adj=rd.randint(0,2*gap)
+    adj=rd.randint(0,3*gap)
     adj=adj-gap+10
     print 'time gap now is:',adj+gap
     return timeNow+adj+gap
@@ -61,7 +62,7 @@ def sendmail(receivers,subject,times,prices):
 
     msgString=('From: %s\r\nTo: %s\r\n\n'%(sender, ','.join(receivers)))
 
-    msgString=msgString+'Current price is:\n\t\t%s\n\nPrice history for this day until now is shown below.\n\n'%(prices[size-1])
+    msgString=msgString+'Current price is:\n\n\t\t\t%s\n\nPrice history for this day until now is shown below.\n\n'%(prices[size-1])
 
     for i in range(size-1, -1,-1):
         msgString=msgString+'\tTime:\t%s\t\tPrice:\t%s\n'%(times[i],prices[i])
@@ -88,13 +89,14 @@ def sendmail(receivers,subject,times,prices):
 
 
 if __name__=='__main__':
-    alertPrice=4050
-    timeGap=360
-    receivers=['zgz07ie@gmail.com','shinsyzgz@163.com']
+    alertPrice=410
+    timeGap=1800
+    receivers=['luochenqu@foxmail.com','shinsyzgz@163.com','shinsy@foxmail.com']
     url="https://www.amazon.fr/dp/B00U654VS6/ref=cm_sw_r_other_apa_E6ryxbFTJT0XP"
     timeStamps=[]
     priceRecords=[]
     nextTime=0
+    maxRecords=50
     
 
     while True:
@@ -106,11 +108,13 @@ if __name__=='__main__':
             if getNum(priceNow)<=alertPrice:
                 sendmail(receivers,'Price Dropped to %d!'%(getNum(priceNow)),timeStamps,priceRecords)
 
-        if datetime.datetime.hour==9:
+        hourNow=int(datetime.datetime.now().strftime("%H"))
+
+        if hourNow==13 or hourNow==21: 
             sendmail(receivers,'daily price report',timeStamps,priceRecords)
-            if len(priceRecords)>50:
-                priceRecords=priceRecords[-50]
-                timeStamps=timeStamps[-50]
+            if len(priceRecords)>maxRecords:
+                priceRecords=priceRecords[-maxRecords:]
+                timeStamps=timeStamps[-maxRecords:]
 
         time.sleep(10)
         print 'still working... current time is %s'%(datetime.datetime.now().strftime("%H:%M:%S"))
