@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup as bs
 
 
 def getPrice(url):
-    myHeaders={
+    myHeaders1={
         'Host': 'www.amazon.fr',
         'Connection': 'keep-alive',
         'Cache-Control': 'max-age=0',
@@ -25,8 +25,21 @@ def getPrice(url):
         'Accept-Encoding': 'gzip, deflate, sdch, br',
         'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
         }
+    myHeaders2={
+        'Host': 'www.amazon.fr',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, sdch, br',
+        'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
+        }  
 
-    r= requests.get(url,timeout=10,headers=myHeaders)
+    headerList=[myHeaders1,myHeaders2]
+    headerChosen=rd.randint(0,1)
+
+    r= requests.get(url,timeout=10,headers=headerList[headerChosen])
 
 
     soup = bs(r.content)
@@ -38,10 +51,11 @@ def getPrice(url):
     commaIndex=priceString.index(",")
     return float(priceString[4:commaIndex]+"."+priceString[commaIndex+1:])
 
+
 def getNextTime(gap):
     timeNow=time.time()
     rd.seed()
-    adj=rd.randint(0,3*gap)
+    adj=rd.randint(0,4*gap)
     adj=adj-gap+10
     print 'time gap now is:',adj+gap
     return timeNow+adj+gap
@@ -77,20 +91,30 @@ def sendmail(receivers,subject,times,prices):
     host="smtp.sohu.com"
     user="shinsyzgz@sohu.com"
     pwd="881028zgz"
-    try:
-        smtpObj = smtplib.SMTP()
-        smtpObj.connect(host,25)
-        smtpObj.login(user,pwd)
-        smtpObj.sendmail(sender, receivers, message.as_string())
-        print "result sent to",receivers 
-    except :
-        print "sth. wrong when sending email."
-        #raise
+    sent=False
+    count=0
+    while not sent:
+        count=count+1
+        if count>10:
+            print 'ERROR: FAILED TO SEND EMAIL.'
+            break
+        try:
+            smtpObj = smtplib.SMTP()
+            smtpObj.connect(host,25)
+            smtpObj.login(user,pwd)
+            smtpObj.sendmail(sender, receivers, message.as_string())
+            print "result sent to",receivers 
+            sent=True
+        except :
+            print "sth. wrong when sending email. retrying..."
+            sent=False
+            time.sleep(randint(5,20))
+            #raise
 
 
 if __name__=='__main__':
     alertPrice=410
-    timeGap=1800
+    timeGap=10000
     receivers=['luochenqu@foxmail.com','zgz07ie@gmail.com']
     url="https://www.amazon.fr/dp/B00U654VS6/ref=cm_sw_r_other_apa_E6ryxbFTJT0XP"
     timeStamps=[]
