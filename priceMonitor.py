@@ -38,6 +38,7 @@ def getPrice(url):
 
     headerList=[myHeaders1,myHeaders2]
     headerChosen=rd.randint(0,1)
+    print 'using header:', headerChosen
 
     r= requests.get(url,timeout=10,headers=headerList[headerChosen])
 
