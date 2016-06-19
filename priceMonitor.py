@@ -51,6 +51,7 @@ def getPrice(url):
 	    print "didn't find price information"
 	    return -1
     priceString= priceSpan[0].getText()
+    print priceString
     commaIndex=priceString.index(",")
     return float(priceString[4:commaIndex]+"."+priceString[commaIndex+1:])
 
@@ -111,7 +112,7 @@ def sendmail(receivers,subject,times,prices):
         except :
             print "sth. wrong when sending email. retrying..."
             sent=False
-            time.sleep(randint(5,20))
+            time.sleep(rd.randint(5,20))
             #raise
 
 
@@ -120,6 +121,7 @@ if __name__=='__main__':
     timeGap=10000
     receivers=['luochenqu@foxmail.com','zgz07ie@gmail.com']
     url="https://www.amazon.fr/dp/B00U654VS6/ref=cm_sw_r_other_apa_E6ryxbFTJT0XP"
+    url2="www.baidu.com"
     timeStamps=[]
     priceRecords=[]
     nextTime=0
@@ -148,7 +150,8 @@ if __name__=='__main__':
         elif not (hourNow==13 or hourNow==21):
             daily=False
 
-        time.sleep(120)
+        time.sleep(1200)
+        getPrice(url2)
         print 'still working... current time is %s'%(datetime.datetime.now().strftime("%H:%M:%S"))
 
 
