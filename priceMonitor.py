@@ -16,25 +16,25 @@ from bs4 import BeautifulSoup as bs
 
 def getPrice(url):
     myHeaders1={
-        'Host': 'www.amazon.fr',
-        'Connection': 'keep-alive',
-        'Cache-Control': 'max-age=0',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, sdch, br',
-        'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
-        }
+            'Host': 'www.amazon.fr',
+            'Connection': 'keep-alive',
+            'Cache-Control': 'max-age=0',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Encoding': 'gzip, deflate, sdch, br',
+            'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
+            }
     myHeaders2={
-        'Host': 'www.amazon.fr',
-        'Connection': 'keep-alive',
-        'Cache-Control': 'max-age=0',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, sdch, br',
-        'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
-        }  
+            'Host': 'www.amazon.fr',
+            'Connection': 'keep-alive',
+            'Cache-Control': 'max-age=0',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Encoding': 'gzip, deflate, sdch, br',
+            'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
+            }  
 
     headerList=[myHeaders1,myHeaders2]
     headerChosen=rd.randint(0,1)
@@ -48,8 +48,8 @@ def getPrice(url):
     if len( priceSpan)>1:
         print 'find more than one results.'
     if len(priceSpan)==0:
-	    print "didn't find price information"
-	    return -1
+        print "didn't find price information"
+            return -1
     priceString= priceSpan[0].getText()
     print priceString
     commaIndex=priceString.index(",")
@@ -115,6 +115,35 @@ def sendmail(receivers,subject,times,prices):
             time.sleep(rd.randint(5,20))
             #raise
 
+def keepInternet():
+    url="https://www.baidu.com/"
+    myHeaders1={
+            'Host': 'www.baidu.com',
+            'Connection': 'keep-alive',
+            'Cache-Control': 'max-age=0',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Encoding': 'gzip, deflate, sdch, br',
+            'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
+            }
+    myHeaders2={
+            'Host': 'www.baidu.com',
+            'Connection': 'keep-alive',
+            'Cache-Control': 'max-age=0',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/601.6.17 (KHTML, like Gecko) Version/9.1.1 Safari/601.6.17',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Encoding': 'gzip, deflate, sdch, br',
+            'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
+            }  
+
+    headerList=[myHeaders1,myHeaders2]
+    headerChosen=rd.randint(0,1)
+    print 'Keep internet: using header:', headerChosen
+
+    r= requests.get(url,timeout=10,headers=headerList[headerChosen])
+
 
 if __name__=='__main__':
     alertPrice=410
@@ -150,8 +179,8 @@ if __name__=='__main__':
         elif not (hourNow==13 or hourNow==21):
             daily=False
 
-        time.sleep(1200)
-        getPrice(url2)
+        time.sleep(rd.randint(200,800))
+        keepInternet()
         print 'still working... current time is %s'%(datetime.datetime.now().strftime("%H:%M:%S"))
 
 
