@@ -49,7 +49,7 @@ def getPrice(url):
         print 'find more than one results.'
     if len(priceSpan)==0:
         print "didn't find price information"
-            return -1
+        return -1
     priceString= priceSpan[0].getText()
     print priceString
     commaIndex=priceString.index(",")
