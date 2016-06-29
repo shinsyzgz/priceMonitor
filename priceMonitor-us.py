@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup as bs
 
 def getPrice(url):
     myHeaders1={
-            'Host': 'www.amazon.fr',
+            'Host': 'www.amazon.com',
             'Connection': 'keep-alive',
             'Cache-Control': 'max-age=0',
             'Upgrade-Insecure-Requests': '1',
@@ -26,7 +26,7 @@ def getPrice(url):
             'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh-TW;q=0.4'
             }
     myHeaders2={
-            'Host': 'www.amazon.fr',
+            'Host': 'www.amazon.com',
             'Connection': 'keep-alive',
             'Cache-Control': 'max-age=0',
             'Upgrade-Insecure-Requests': '1',
@@ -53,7 +53,6 @@ def getPrice(url):
     priceString= priceSpan[0].getText()
     print priceString
     commaIndex=priceString.index("$")
-    pdb.set_trace()
     return float(priceString[commaIndex+1:])
 
 
@@ -166,13 +165,13 @@ if __name__=='__main__':
             timeStamps.append(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             priceRecords.append(priceNow)
             if getNum(priceNow)<=alertPrice:
-                sendmail(receivers,'Price Dropped to %d!'%(getNum(priceNow)),timeStamps,priceRecords)
+                sendmail(receivers,'US-Price Dropped to %d!'%(getNum(priceNow)),timeStamps,priceRecords)
 
         hourNow=int(datetime.datetime.now().strftime("%H"))
 
         if (hourNow==13 or hourNow==21) and (not daily): 
             daily=True
-            sendmail(receivers,'daily price report',timeStamps,priceRecords)
+            sendmail(receivers,'US-daily price report',timeStamps,priceRecords)
             if len(priceRecords)>maxRecords:
                 priceRecords=priceRecords[-maxRecords:]
                 timeStamps=timeStamps[-maxRecords:]
